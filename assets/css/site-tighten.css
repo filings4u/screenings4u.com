@@ -137,3 +137,23 @@ main input,main select,main textarea{max-width:100%}
   .faqs-hero,section.hero{padding-top:22px!important;padding-bottom:22px!important}
   .s4u-hero-photo{min-height:220px;border-radius:14px}
 }
+
+/* Shared testing-request pages: match public marketing hero and 1450px grid. */
+.s4u-request-hero{position:relative;color:#fff;background:linear-gradient(90deg,rgba(7,26,49,.97) 0%,rgba(7,26,49,.88) 52%,rgba(7,26,49,.4) 100%),url("../../images/hero.webp") center/cover no-repeat;padding:76px 0 84px;overflow:hidden}
+.s4u-request-hero .container{width:min(1450px,calc(100% - 48px));margin-inline:auto}
+.s4u-request-hero .s4u-request-hero-content{max-width:800px;margin:0;text-align:left}
+.s4u-request-hero .eyebrow{color:#ffb27c;text-transform:uppercase;font-size:13px;font-weight:800;letter-spacing:.12em}
+.s4u-request-hero h1{font-size:clamp(42px,5vw,72px);font-weight:900;line-height:1.04;letter-spacing:-.045em;margin:18px 0 20px;color:#fff}
+.s4u-request-hero p{color:#e0eaf5;font-size:18px;line-height:1.7;max-width:720px;margin:0}
+main.request.s4u-request-layout{background:#f4f7fc;padding:60px 0 80px}
+main.request.s4u-request-layout .request-shell{width:min(1450px,calc(100% - 48px));max-width:1450px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:30px;align-items:start}
+main.request.s4u-request-layout .request-card{min-width:0;padding:38px;border-radius:18px;border:1px solid #d9e3f0;box-shadow:0 18px 45px rgba(36,70,127,.08)}
+main.request.s4u-request-layout .request-card h2{color:#24467f;font-size:clamp(25px,3vw,34px);letter-spacing:-.025em;margin:0 0 10px}
+main.request.s4u-request-layout .request-card .form-lead{margin:0 0 28px;color:#667892}
+main.request.s4u-request-layout .request-aside{background:#fff;border:1px solid #d9e3f0;border-radius:18px;padding:30px;box-shadow:0 12px 30px rgba(36,70,127,.06)}
+main.request.s4u-request-layout .request-aside h2{font-size:22px;color:#24467f;margin:0 0 14px}
+main.request.s4u-request-layout .request-aside p{color:#667892;line-height:1.7;margin:0 0 18px}
+main.request.s4u-request-layout .request-aside a{color:#24467f;font-weight:800}
+main.request.s4u-request-layout input:focus-visible,main.request.s4u-request-layout select:focus-visible,main.request.s4u-request-layout textarea:focus-visible{outline:2px solid #24467f;outline-offset:2px}
+@media(max-width:900px){main.request.s4u-request-layout .request-shell{grid-template-columns:minmax(0,1fr)}.s4u-request-hero{padding:54px 0 60px}}
+@media(max-width:600px){main.request.s4u-request-layout{padding:28px 0 48px}main.request.s4u-request-layout .request-shell,.s4u-request-hero .container{width:calc(100% - 32px)}main.request.s4u-request-layout .request-card{padding:22px}.s4u-request-hero h1{font-size:clamp(36px,10vw,50px)}}
