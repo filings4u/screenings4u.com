@@ -8,7 +8,7 @@ Deno.serve(async req=>{
  try{
   const url=Deno.env.get("SUPABASE_URL")||"",anon=Deno.env.get("SUPABASE_ANON_KEY")||"",service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")||"";
   if(!url||!anon||!service)return reply({error:"Configuration unavailable"},500);
-  const token=(req.headers.get("authorization")||"").replace(/^Bearer\\s+/i,"").trim();if(!token)return reply({error:"Authentication required"},401);
+  const token=(req.headers.get("authorization")||"").replace(/^Bearer\s+/i,"").trim();if(!token)return reply({error:"Authentication required"},401);
   const auth=createClient(url,anon,{auth:{persistSession:false,autoRefreshToken:false}});
   const {data:{user},error}=await auth.auth.getUser(token);if(error||!user)return reply({error:"Authentication required"},401);
   const db=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
