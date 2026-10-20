@@ -43,6 +43,36 @@ Deno.serve(async(req:Request)=>{
       matches.push({subscription_id:sub.id,program:value,role:subject.kind,agency:value==="DOT"?String(subject.agency).toUpperCase():null});
     }
   }
+  // Legacy DOT bridge. No subscription copy or new charge; owner-operators excluded.
+  const lm=await db.from("organization_memberships").select("id").eq("organization_id",org).eq("user_id",user.id).eq("status","active").limit(1);
+  if(lm.error)throw lm.error;
+  if(lm.data?.length){
+    const [gr,es,cs]=await Promise.all([
+      db.from("organization_portal_access").select("portal_code").eq("organization_id",org).eq("enabled",true),
+      db.from("employers").select("id,applicable_dot_agency").eq("organization_id",org).eq("status","active"),
+      db.from("ctpas").select("id").eq("organization_id",org).eq("status","active")
+    ]);
+    for(const q of [gr,es,cs])if(q.error)throw q.error;
+    const codes=new Set((gr.data||[]).map((v:any)=>String(v.portal_code)));
+    const subjects=[...(es.data||[]).map((v:any)=>({...v,kind:"employer"})),...(cs.data||[]).map((v:any)=>({...v,kind:"ctpa"}))];
+    for(const subject of subjects){
+      const sr=await db.from("subscriptions").select("id,plan_id").eq(subject.kind==="ctpa"?"ctpa_id":"employer_id",subject.id).in("status",["active","trial","trialing"]);
+      if(sr.error)throw sr.error;
+      if(!sr.data?.length)continue;
+      const pr=await db.from("plans").select("id,code,audience").in("id",sr.data.map((v:any)=>v.plan_id)).eq("active",true);
+      if(pr.error)throw pr.error;
+      const planMap=new Map((pr.data||[]).map((v:any)=>[v.id,v]));
+      for(const sub of sr.data){
+        const plan:any=planMap.get(sub.plan_id);if(!plan||plan.audience==="owner_operator")continue;
+        const code=String(plan.code||"");
+        const ct=subject.kind==="ctpa"&&plan.audience==="ctpa"&&code.startsWith("dot_ctpa_")&&codes.has("ctpa_dot");
+        const em=subject.kind==="employer"&&plan.audience==="employer"&&code.startsWith("dot_")&&!code.endsWith("_test")&&
+          (codes.has("employer_dot")||[...codes].some(v=>v.endsWith("_dot")&&v!=="ctpa_dot"));
+        if(ct||em)matches.push({subscription_id:sub.id,program:ct?"DOT_AND_NON_DOT":"DOT",role:subject.kind,
+          agency:DOT_AGENCIES.has(String(subject.applicable_dot_agency||"").toUpperCase())?String(subject.applicable_dot_agency).toUpperCase():null,source:"legacy_dot"});
+      }
+    }
+  }
   const effective=[...new Set(matches.flatMap(m=>m.program==="DOT_AND_NON_DOT"||m.program==="DOT"?["DOT","NON_DOT"]:["NON_DOT"]))];
   return out({organization_id:org,access_granted:matches.length>0,effective_programs:effective,effective_portals:[...new Set(matches.map(m=>m.role==="ctpa"?"ctpa_workforce":"employer_workforce"))],subscriptions:matches,requires_onboarding:matches.length===0});
  }catch(e){console.error("workforce-access-policy",e);return out({error:"Access evaluation failed"},500)}
