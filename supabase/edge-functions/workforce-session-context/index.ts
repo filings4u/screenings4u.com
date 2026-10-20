@@ -31,6 +31,10 @@ Deno.serve(async req=>{
    for(const q of [personal,org,role])if(q.error)throw q.error;
    if(personal.data?.enabled===false)continue;
    if(personal.data?.enabled!==true&&org.data?.enabled!==true)continue;
+   // Never classify an owner-operator membership as an employer workspace.
+   const roleCode=String(role.data?.code||"").toLowerCase();
+   if(requested==="employer"&&roleCode.includes("owner_operator"))continue;
+   if(requested==="ctpa"&&!roleCode.includes("ctpa"))continue;
    if(requested==="ctpa"||requested==="employer"){
     const subject=requested==="ctpa"?"workforce_ctpas":"workforce_employers",key=requested==="ctpa"?"ctpa_id":"employer_id";
     const entity=await db.from(subject).select("id").eq("organization_id",member.organization_id).eq("status","active").maybeSingle();
