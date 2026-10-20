@@ -24,7 +24,11 @@ Deno.serve(async(req:Request)=>{
    db.from("workforce_ctpas").select("id").eq("organization_id",org).eq("status","active")
   ]);
   for(const q of [member,personal,organization,emp,ctpa])if(q.error)throw q.error;
-  if(!member.data?.length)return out({error:"Organization access denied"},403);
+  // Legacy customers may have organization_memberships but not workforce_memberships.
+  // Require at least one active membership; each subscription branch checks its own grants.
+  const legacyMember=await db.from("organization_memberships").select("id").eq("organization_id",org).eq("user_id",user.id).eq("status","active").limit(1);
+  if(legacyMember.error)throw legacyMember.error;
+  if(!member.data?.length&&!legacyMember.data?.length)return out({error:"Organization access denied"},403);
   const allowed=new Set((personal.data||[]).map((v:any)=>v.portal_code).filter((code:string)=>(organization.data||[]).some((a:any)=>a.portal_code===code)));
   const subjects=[...(emp.data||[]).map((e:any)=>({id:e.id,kind:"employer",classification:e.workforce_classification,agency:e.applicable_dot_agency})),...(ctpa.data||[]).map((c:any)=>({id:c.id,kind:"ctpa"}))];
   const matches:any[]=[];
