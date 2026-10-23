@@ -6,7 +6,7 @@ async function initDonorPass(){
   const params=new URLSearchParams(location.search);
   const orderId=String(params.get("order")||params.get("order_id")||"").trim();
   const tracking=String(params.get("tracking")||params.get("tracking_number")||"").trim();
-  document.getElementById("printButton")?.addEventListener("click",()=>window.print());
+  document.getElementById("printButton")?.addEventListener("click",()=>{const ready=Array.from(document.querySelectorAll(".dp-item")).some(el=>el.dataset.issued==="true");if(ready)window.print();else showMessage("Your donor pass is not ready for printing until registration is confirmed.","error")});
   setupLabcorpSitePicker(orderId,tracking);
   if(!orderId||!tracking){showMessage("This donor-pass link is incomplete. Use the link from your order confirmation or receipt email.","error");renderEmpty();return}
   try{
@@ -25,7 +25,7 @@ function renderOrder(order,passes,cases){
   setText("trackingNumber",order.tracking_number||"—");setText("orderNumber",order.order_number||"—");
   const host=document.getElementById("donorPassList");if(!host)return;
   if(!passes.length){host.innerHTML=`<div class="status active"><div class="status-title">Donor pass is being prepared.</div><div class="status-copy">Your payment is confirmed. The Testing workflow is active, and your donor pass will appear here as soon as the registration record is ready.</div></div>`;showMessage("Your order is paid and active. No donor pass has been issued yet.","success");return}
-  host.innerHTML=passes.map((p,i)=>{const l=p.labcorp||{};const registered=Boolean(l.registration_number);const site=p.collection_site_name||"Pending collection location";const address=p.collection_site_address||"Collection-site address will appear when assigned.";const note=registered?(p.status==="issued"?"Bring a government-issued photo ID and this donor pass to the assigned collection site.":"Your testing registration exists. screenings4u is finalizing your donor-pass/site details."):"Your paid order created a testing registration draft. The registration number will appear here once registration is complete.";return `<article class="dp-item"><div class="dp-head"><div><h2>${esc(p.test_type||p.panel_name||`Drug Test ${i+1}`)}</h2><p>${esc(p.pass_number||"Donor pass pending")}</p></div><span class="dp-badge">${esc(label(p.status))}</span></div><div class="dp-grid"><div class="dp-cell"><span>Donor</span><strong>${esc(p.donor_name||order.customer_name||"—")}</strong></div><div class="dp-cell"><span>Specimen</span><strong>${esc(p.specimen_type||"—")}</strong></div><div class="dp-cell"><span>Reason</span><strong>${esc(p.test_reason||"—")}</strong></div><div class="dp-cell"><span>Registration Number</span><strong>${esc(l.registration_number||"Pending")}</strong></div><div class="dp-cell"><span>Registration Status</span><strong>${esc(l.status_text||label(l.status)||"Pending")}</strong></div><div class="dp-cell"><span>Collection Deadline</span><strong>${esc(fmt(p.collection_deadline))}</strong></div></div><div class="dp-site"><h3>${esc(site)}</h3><p>${esc(address)}</p></div><div class="dp-note">${esc(note)}</div></article>`}).join("");
+  host.innerHTML=passes.map((p,i)=>{const l=p.labcorp||{};const registered=Boolean(l.registration_number);const site=p.collection_site_name||"Pending collection location";const address=p.collection_site_address||"Collection-site address will appear when assigned.";const note=registered?(p.status==="issued"?"Bring a government-issued photo ID and this donor pass to the assigned collection site.":"Your testing registration exists. screenings4u is finalizing your donor-pass/site details."):"Your paid order created a testing registration draft. The registration number will appear here once registration is complete.";return `<article class="dp-item" data-issued="${p.status==="issued"&&registered}"><div class="dp-head"><div><h2>${esc(p.test_type||p.panel_name||`Drug Test ${i+1}`)}</h2><p>${esc(p.pass_number||"Donor pass pending")}</p></div><span class="dp-badge">${esc(label(p.status))}</span></div><div class="dp-grid"><div class="dp-cell"><span>Donor</span><strong>${esc(p.donor_name||order.customer_name||"—")}</strong></div><div class="dp-cell"><span>Specimen</span><strong>${esc(p.specimen_type||"—")}</strong></div><div class="dp-cell"><span>Reason</span><strong>${esc(p.test_reason||"—")}</strong></div><div class="dp-cell"><span>Registration Number</span><strong>${esc(l.registration_number||"Pending")}</strong></div><div class="dp-cell"><span>Registration Status</span><strong>${esc(l.status_text||label(l.status)||"Pending")}</strong></div><div class="dp-cell"><span>Collection Deadline</span><strong>${esc(fmt(p.collection_deadline))}</strong></div></div><div class="dp-site"><h3>${esc(site)}</h3><p>${esc(address)}</p></div><div class="dp-note">${esc(note)}</div></article>`}).join("");
   showMessage("Your donor-pass workflow is linked to your paid screenings4u order and testing registration.","success");
 }
 function renderEmpty(){const host=document.getElementById("donorPassList");if(host)host.innerHTML='<div class="status active"><div class="status-title">Donor pass unavailable.</div><div class="status-copy">Please verify the link or contact screenings4u for assistance.</div></div>'}
@@ -59,7 +59,7 @@ function setupLabcorpSitePicker(orderId,tracking){
       renderOrder(state.order||{},state.donor_passes||[],state.cases||[]);
       showPassViewer(state,site);
     }));
-;panel.append(name,address,button);host.appendChild(panel)
+    panel.append(name,address,button);host.appendChild(panel)
    }
   }catch(error){host.textContent=error.message||"Location search is unavailable"}
  });
@@ -126,7 +126,7 @@ function showPassViewer(data,site){
  const actions=document.createElement("div");actions.className="pass-modal-buttons";
  const done=document.createElement("button");done.type="button";done.textContent="Close";done.onclick=()=>dialog.close();actions.append(done);
  if(issued.length){
-  const pdf=document.createElement("button");pdf.type="button";pdf.className="btn btn-orange";pdf.textContent="Download / Save PDF";pdf.onclick=()=>{dialog.close();window.print()};actions.append(pdf);
+  const pdf=document.createElement("button");pdf.type="button";pdf.className="btn btn-orange";pdf.textContent="Download / Save PDF";pdf.onclick=()=>window.print();actions.append(pdf);
  }
  target.append(actions);
 }
