@@ -230,3 +230,20 @@
  .market-footer .footbottom>span{max-width:none;font-size:10px;line-height:1.45}
  .support-fab{position:fixed!important;right:14px!important;bottom:calc(14px + env(safe-area-inset-bottom, 0px))!important;z-index:1101!important;width:52px;height:52px;border-radius:50%}
 }
+
+
+/* Mobile header: remove the promotional strip and expose scroll controls. */
+@media (max-width: 750px) {
+  .shipbar { display: none !important; }
+  .market-nav { position: relative; }
+  .market-nav .navwrap { scroll-behavior: smooth; padding-left: 34px; padding-right: 34px; scroll-padding-inline: 38px; }
+  .market-nav-scroll-arrow { position: absolute; z-index: 3; top: 50%; transform: translateY(-50%); width: 30px; height: 38px; display: flex; align-items: center; justify-content: center; background: #fff; color: #24467f; border: 1px solid #d8e2ee; border-radius: 7px; box-shadow: 0 2px 8px #17395b18; font-size: 25px; line-height: 1; }
+  .market-nav-scroll-arrow[data-direction="left"] { left: 3px; }
+  .market-nav-scroll-arrow[data-direction="right"] { right: 3px; }
+  .market-nav-scroll-arrow:disabled { opacity: .28; pointer-events: none; }
+  body.checkout-market .checkout-container, body.checkout-market .checkout-main, body.checkout-market #checkoutGrid, body.checkout-market .checkout-form-card, body.checkout-market .checkout-summary { min-width: 0; max-width: 100%; }
+  body.checkout-market #payment-element, body.checkout-market #checkoutForm { min-width: 0; max-width: 100%; }
+  body.checkout-market #payButton { width: 100%; min-height: 48px; touch-action: manipulation; white-space: normal; }
+  body.checkout-market input, body.checkout-market select, body.checkout-market textarea { max-width: 100%; font-size: 16px; }
+}
+@media (min-width: 751px) { .market-nav-scroll-arrow { display: none !important; } }
