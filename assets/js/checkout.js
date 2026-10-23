@@ -1245,7 +1245,7 @@ async function initCheckout() {
     // public catalog rather than rejecting a legitimate checkout URL.
     if (!selectedService) {
       try {
-        const base = String(window.SCREENINGS4U_SUPABASE_URL || "").replace(/\\/+$/, "");
+        const base = String(window.SCREENINGS4U_SUPABASE_URL || "").replace(/\/+$/, "");
         if (!base) throw new Error("Catalog API is not configured.");
         const response = await fetch(base + "/functions/v1/public-testing-catalog", {
           method: "GET",
