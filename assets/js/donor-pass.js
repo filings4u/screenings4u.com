@@ -55,18 +55,32 @@ function setupLabcorpSitePicker(orderId,tracking){
     button.addEventListener("click",()=>confirmSelectedSite(site, async()=>{
       const result=await call({action:"select",site_id:site.id});
       if(!result.saved)throw Error("Could not save collection location.");
-      const state=await loadPassState(orderId,tracking);
-      renderOrder(state.order||{},state.donor_passes||[],state.cases||[]);
       const dialog=passDialog(),target=dialog.querySelector("#passWorkflowContent");
       target.replaceChildren();
       const title=document.createElement("h2");title.textContent="Location confirmed";
-      const message=document.createElement("p");message.textContent="Your collection location is saved. Registration must complete before generating your donor pass.";
-      const generate=document.createElement("button");generate.type="button";generate.className="btn btn-orange";generate.textContent="Generate Donor Pass";
-      const ready=(state.donor_passes||[]).some(p=>p.status==="issued"&&p.labcorp?.registration_number);
-      generate.disabled=!ready;
-      if(!ready)message.textContent+=" Please return when registration is confirmed.";
-      generate.onclick=()=>showPassViewer(state,site);
+      const message=document.createElement("p");message.setAttribute("role","status");
+      message.textContent="Your location is saved. Checking registration status…";
+      const generate=document.createElement("button");generate.type="button";generate.className="btn btn-orange";generate.textContent="Generate Donor Pass";generate.disabled=true;
       target.append(title,message,generate);
+      let checks=0;
+      const refresh=async()=>{
+        if(!dialog.open)return;
+        try{
+          const state=await loadPassState(orderId,tracking);
+          renderOrder(state.order||{},state.donor_passes||[],state.cases||[]);
+          const ready=(state.donor_passes||[]).some(p=>p.status==="issued"&&p.labcorp?.registration_number);
+          if(ready){
+            message.textContent="Registration confirmed. Your donor pass is ready.";
+            generate.disabled=false;
+            generate.onclick=()=>showPassViewer(state,site);
+            return;
+          }
+          message.textContent="Registration is processing. Your pass will be available after confirmation.";
+        }catch(error){message.textContent="Unable to check registration right now. Please try again shortly.";}
+        if(++checks<12)setTimeout(refresh,5000);
+        else message.textContent="Registration is not complete yet. Close this window and return to this page to check again.";
+      };
+      await refresh();
     }));
     panel.append(name,address,button);host.appendChild(panel)
    }
