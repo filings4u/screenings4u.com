@@ -75,7 +75,7 @@ function setupLabcorpSitePicker(orderId,tracking){
 }
 
 async function loadPassState(orderId,tracking){
- const base=String(window.SCREENINGS4U_SUPABASE_URL||"").replace(/\\/+$/,"");
+ const base=String(window.SCREENINGS4U_SUPABASE_URL||"").replace(/\/+$/,"");
  const r=await fetch(base+"/functions/v1/public-testing-donor-pass",{
   method:"POST",headers:{"Content-Type":"application/json","apikey":window.SCREENINGS4U_SUPABASE_ANON_KEY||""},
   body:JSON.stringify({order_id:orderId,tracking}),cache:"no-store"
