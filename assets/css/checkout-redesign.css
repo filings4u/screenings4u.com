@@ -1,13 +1,13 @@
 /* Screenings4U | Storefront-aligned, secure single-test checkout.
    All existing order, validation, Stripe, and discount element IDs are preserved. */
-body.checkout-market {--blue:#24467f;--blue-dark:#173b62;--orange:#ff6b00;--line:#dfe7ef;--muted:#64778c;--ink:#193651;background:#f4f7fc;color:#193651;font-family:Inter,Arial,sans-serif;font-size:14px}
+body.checkout-market {--blue:#24467f;--blue-dark:#24467f;--orange:#ff6b00;--line:#dfe7ef;--muted:#64778c;--ink:#24467f;background:#f4f7fc;color:#24467f;font-family:Inter,Arial,sans-serif;font-size:14px}
 body.checkout-market .market-header{z-index:120}
 body.checkout-market .market-header .wrap,body.checkout-market .market-footer .wrap{width:min(1450px,calc(100% - 64px))}
 body.checkout-market .market-header .market-top{min-height:96px}
 body.checkout-market .market-header .searchbox{height:48px}
 body.checkout-market .market-header .searchbox select,body.checkout-market .market-header .searchbox input{height:46px;min-height:0;border-radius:0;box-shadow:none;font-size:14px}
 body.checkout-market .market-header .searchbox button{height:48px;min-height:48px;width:auto;max-width:none;margin:0;background:#ff6b00;color:#fff;border-radius:0;border:0;font-size:13px;font-weight:800;padding:0 24px}
-body.checkout-market .market-header .market-actions a{color:#183652}
+body.checkout-market .market-header .market-actions a{color:#24467f}
 body.checkout-market .market-header .navwrap{min-height:47px}
 body.checkout-market .market-footer{font-size:14px}
 body.checkout-market .market-footer .footer-cols strong{color:#fff}
@@ -22,7 +22,7 @@ body.checkout-market .checkout-top-row{display:flex;align-items:center;justify-c
 body.checkout-market .back{font-size:12px;display:inline-flex;gap:5px;align-items:center;color:#24467f;font-weight:750;text-decoration:none;white-space:nowrap}
 body.checkout-market .back:hover{color:#ff6b00}
 
-.checkout-heading{display:flex;justify-content:space-between;align-items:center;gap:28px;padding:37px 44px;min-height:206px;border-radius:17px;background:linear-gradient(115deg,#16385a 0%,#244e78 64%,#315c85 100%);color:#fff;position:relative;overflow:hidden}
+.checkout-heading{display:flex;justify-content:space-between;align-items:center;gap:28px;padding:37px 44px;min-height:206px;border-radius:17px;background:linear-gradient(115deg,#24467f 0%,#244e78 64%,#315c85 100%);color:#fff;position:relative;overflow:hidden}
 .checkout-heading::after{content:"";position:absolute;right:-95px;top:-160px;width:450px;height:450px;border:1px solid rgba(255,255,255,.09);border-radius:50%;box-shadow:0 0 0 65px rgba(255,255,255,.025),0 0 0 130px rgba(255,255,255,.017);pointer-events:none}
 .checkout-heading-copy{max-width:760px;position:relative;z-index:1}
 .checkout-kicker{color:#ff9a52;font-size:11px;font-weight:900;letter-spacing:.14em;display:flex;gap:11px;align-items:center}
