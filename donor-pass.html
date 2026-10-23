@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#24467f" name="theme-color"/>
-<meta content="View your screenings4u Labcorp donor pass, registration status, collection details and testing instructions." name="description"/>
+<meta content="View your screenings4u donor pass and collection details." name="description"/>
 <title>Donor Pass | screenings4u</title>
 <link href="images/fav.webp" rel="icon" type="image/png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -281,6 +281,7 @@
     @media(prefers-reduced-motion:reduce){*::before, *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 .tracking-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:min(760px,100%);margin:24px auto 0}.tracking-grid .tracking{margin:0;width:auto}.donor-pass-actions{display:flex;justify-content:flex-end;gap:10px;margin-bottom:22px}.donor-pass-list{display:grid;gap:16px}.dp-item{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}.dp-head{padding:18px 20px;background:#f4f7fc;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.dp-head h2{margin:0 0 5px;font-size:19px;color:var(--blue-dark)}.dp-head p{margin:0;color:var(--muted);font-size:12px}.dp-badge{display:inline-flex;align-items:center;padding:6px 9px;border-radius:999px;background:#e8eff9;color:var(--blue);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}.dp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line)}.dp-cell{background:#fff;padding:15px 17px}.dp-cell span{display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}.dp-cell strong{display:block;color:var(--blue-dark);font-size:13px;line-height:1.45;word-break:break-word}.dp-note{padding:16px 20px;background:#fff8f1;color:#7a4b17;font-size:12px;line-height:1.6;border-top:1px solid #f4dfc8}.dp-site{padding:18px 20px;background:#f4f8ff;border-top:1px solid var(--line)}.dp-site h3{margin:0 0 6px;color:var(--blue-dark);font-size:15px}.dp-site p{margin:0;color:#52677f;font-size:12px;line-height:1.6}@media(max-width:720px){.tracking-grid{grid-template-columns:1fr}.donor-pass-actions{display:grid;grid-template-columns:1fr}.donor-pass-actions .btn{width:100%}.dp-grid{grid-template-columns:1fr}.dp-head{display:block}.dp-badge{margin-top:10px}}@media print{#siteHeader,#siteFooter,.donor-pass-actions{display:none!important}.page{padding:0}.card{box-shadow:none;border:0}.dp-item{break-inside:avoid}}
+.s4u-pass-dialog{border:0;border-radius:18px;width:min(590px,calc(100vw - 24px));max-height:85dvh;overflow:auto;padding:0;box-shadow:0 24px 85px #0b244d55;color:#183b63;font:inherit}.s4u-pass-dialog::backdrop{background:#09213db0}.pass-modal-body{padding:30px;position:relative}.pass-modal-close{position:absolute;right:14px;top:12px;background:#edf3fa;border:0;border-radius:50%;font-size:22px;width:36px;height:36px;cursor:pointer}.pass-modal-body h2{font-size:24px;padding-right:35px;margin:0 0 15px}.pass-modal-body h3{font-size:16px;margin:12px 0 5px}.pass-modal-body p{font-size:14px;line-height:1.6}.pass-modal-buttons{display:flex;justify-content:flex-end;gap:12px;margin-top:22px;flex-wrap:wrap}.pass-modal-buttons button{border:1px solid #24467f;border-radius:10px;padding:12px 18px;cursor:pointer;font-weight:700}.pass-modal-error{color:#a31e23}.pass-modal-card{margin:15px 0;padding:16px;border:1px solid #dce7f4;border-radius:12px;background:#f7faff}@media(max-width:600px){.pass-modal-body{padding:23px 18px}.pass-modal-buttons{display:grid;grid-template-columns:1fr}.pass-modal-buttons button{width:100%}.dp-grid{grid-template-columns:1fr}.donor-pass-actions{flex-direction:column}}@media print{.s4u-pass-dialog:not([open]){display:none!important}.s4u-pass-dialog[open]{position:static;max-height:none;box-shadow:none;width:100%;border:0}.s4u-pass-dialog::backdrop{display:none}} 
 </style>
 <link href="assets/css/form-security.css?v=20260918-1" rel="stylesheet"/>
 <script defer="" src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
@@ -291,9 +292,9 @@
 <div class="container">
 <section class="card donor-pass-card">
   <div class="intro">
-    <div class="eyebrow">Labcorp Drug Testing</div>
+    <div class="eyebrow">screenings4u • Collection Services</div>
     <h1>Your Donor Pass.</h1>
-    <p>Use this page to follow your screenings4u lab-testing order from registration through collection. Labcorp registration and collection-site details appear here when they are available.</p>
+    <p>Choose your collection location and generate your donor pass after your registration is confirmed.</p>
     <div class="tracking-grid">
       <div class="tracking"><span class="tracking-label">S4U Tracking Number</span><strong id="trackingNumber">—</strong></div>
       <div class="tracking"><span class="tracking-label">Order Number</span><strong id="orderNumber">—</strong></div>
@@ -305,7 +306,7 @@
       <button class="btn btn-blue" id="printButton" type="button">Print Donor Pass</button>
       <a class="btn btn-orange" href="https://customers.screenings4u.com" id="portalButton">Open Customer Portal</a>
     </div>
-    <section id="labcorpLocationPicker" class="dp-site" style="margin-bottom:22px;border:1px solid #d7e3f4;border-radius:12px"><h2 class="section-title">Find your Labcorp collection location</h2><p class="section-copy">After payment, choose a Labcorp location for your test. Your donor pass will update with the selected collection address.</p><form id="labcorpSiteSearch" style="display:flex;flex-wrap:wrap;align-items:end;gap:12px"><label style="flex:1;min-width:160px">ZIP code<input id="labcorpSiteZip" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required placeholder="5-digit ZIP"></label><button class="btn btn-blue" type="submit">Find Locations</button></form><div id="labcorpSiteResults" aria-live="polite" style="margin-top:12px"></div></section><div id="donorPassList" class="donor-pass-list">
+    <section id="labcorpLocationPicker" class="dp-site" style="margin-bottom:22px;border:1px solid #d7e3f4;border-radius:12px"><h2 class="section-title">Choose your collection location</h2><p class="section-copy">Search for a collection location and choose where you would like to complete your test.</p><form id="labcorpSiteSearch" style="display:flex;flex-wrap:wrap;align-items:end;gap:12px"><label style="flex:1;min-width:160px">ZIP code<input id="labcorpSiteZip" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required placeholder="5-digit ZIP"></label><button class="btn btn-blue" type="submit">Find Locations</button></form><div id="labcorpSiteResults" aria-live="polite" style="margin-top:12px"></div></section><div id="donorPassList" class="donor-pass-list">
       <div class="status active"><div class="status-title">Loading donor pass…</div><div class="status-copy">We are retrieving your paid order and Labcorp workflow.</div></div>
     </div>
   </div>
@@ -318,7 +319,7 @@
 <script src="assets/js/site-config.js"></script>
 <!-- donor-pass.js creates the public Supabase client if the shared client is unavailable. -->
 <!-- Donor pass location workflow -->
-<script src="assets/js/donor-pass.js"></script>
+<script src="assets/js/donor-pass.js?v=20261023-site-modal2"></script>
 <footer aria-label="Website footer" class="site-footer" data-site-footer="" id="siteFooter"></footer>
 <script src="assets/js/site-ui.js?v=20260904-1"></script>
 <script src="assets/js/navigation.js?v=20261003-mobilefix2"></script><script src="assets/js/footer.js?v=20261002-shell1"></script></body>
