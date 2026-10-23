@@ -6,12 +6,23 @@ const save=a=>{try{localStorage.setItem(KEY,JSON.stringify(a))}catch{};count()};
 const count=()=>document.querySelectorAll('[data-cart-count]').forEach(el=>el.textContent=String(ids().reduce((sum,id)=>sum+quantity(id),0)));
 const add=id=>{const set=ids();if(!set.includes(id))set.push(id);save(set);window.dispatchEvent(new Event('market-cart-updated'))};
 const del=id=>{save(ids().filter(x=>x!==id));window.dispatchEvent(new Event('market-cart-updated'))};
-const all=()=>typeof getAllTestServices==='function'?getAllTestServices().filter(s=>s&&s.id&&s.name&&s.orderType!=='contact'&&s.orderType!=='custom_form'):[];
+const DEV_TEST_IDS=['labcorp_dev_1usd_dot','labcorp_dev_1usd_hair','labcorp_dev_1usd_instant','labcorp_dev_1usd_non_dot'];
+const DEV_TEST_NAMES=['Labcorp DEV Transaction — DOT','Labcorp DEV Transaction — Hair','Labcorp DEV Transaction — Instant','Labcorp DEV Transaction — Non-DOT'];
+const DEV_TEST_SPECIMENS=['Urine','Hair','Urine','Urine'];
+const all=()=>{
+ const listed=typeof getAllTestServices==='function'?getAllTestServices().filter(s=>s&&s.id&&s.name&&s.orderType!=='contact'&&s.orderType!=='custom_form'):[];
+ const result=[...listed];
+ for(let i=0;i<DEV_TEST_IDS.length;i++){
+   if(result.some(s=>s.id===DEV_TEST_IDS[i]))continue;
+   result.push({id:DEV_TEST_IDS[i],name:DEV_TEST_NAMES[i],category:'Labcorp DEV Transaction Tests',specimen:DEV_TEST_SPECIMENS[i],description:'Authorized $1 Labcorp development transaction test.',price:100,currency:'usd',orderType:'checkout'});
+ }
+ return result;
+};
 const price=s=>Number.isFinite(Number(s.price))&&Number(s.price)>0?formatTestPrice(Number(s.price),s.currency||'USD'):'View details';
 const group=s=>{const x=[s.category,s.specimen,s.name,s.id].join(' ').toLowerCase();return /\bdot\b|dot_|fmcsa/.test(x)&&!/non[ -]?dot/.test(x)?'DOT':/hair/.test(x)?'Hair':/oral|saliva/.test(x)?'Oral':/alcohol|etg|breath/.test(x)?'Alcohol':/instant|rapid/.test(x)?'Instant':/dna/.test(x)?'DNA':/urine|drug test|panel/.test(x)?'Urine':'Other'};
 const categoryMatch=(s,c)=>!c||[s.category,s.specimen,s.name,s.id,group(s)].join(' ').toLowerCase().includes(c.toLowerCase());
 const icon=s=>({DOT:'◈',Hair:'⌁',Oral:'◎',Alcohol:'◍',Instant:'✦',DNA:'◇',Urine:'◉'}[group(s)]||'✚');
-const url=s=>'service.html?service='+encodeURIComponent(s.id);
+const url=s=>DEV_TEST_IDS.includes(s.id)?'checkout.html?service='+encodeURIComponent(s.id):'service.html?service='+encodeURIComponent(s.id);
 const cartButton=s=>`<button type="button" data-save="${esc(s.id)}" aria-label="${ids().includes(s.id)?'Remove from cart: ':'Add to cart: '}${esc(s.name)}" aria-pressed="${ids().includes(s.id)}">${ids().includes(s.id)?'✓ In cart':'＋ Add to cart'}</button>`;
 const syncCartButtons=()=>document.querySelectorAll('[data-save]').forEach(btn=>{const inCart=ids().includes(btn.dataset.save);btn.textContent=inCart?'✓ In cart':'＋ Add to cart';btn.setAttribute('aria-pressed',String(inCart));btn.setAttribute('aria-label',(inCart?'Remove from cart: ':'Add to cart: ')+(all().find(s=>s.id===btn.dataset.save)?.name||'test'))});
 const card=s=>`<article class="product-card"><a class="product-image" href="${url(s)}" aria-label="View ${esc(s.name)}"><span class="tag-spec">${esc(s.specimen||group(s))}</span><span class="spec-icon" aria-hidden="true">${icon(s)}</span></a><div class="product-info"><span class="product-category">${esc(s.category||group(s))}</span><h3><a href="${url(s)}">${esc(s.name)}</a></h3><p>${esc(s.description||'View testing requirements, panel details and ordering information.')}</p><div class="product-price">${price(s)}</div><div class="product-buttons"><a href="${url(s)}">View test & order →</a>${cartButton(s)}</div></div></article>`;
