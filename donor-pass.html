@@ -305,7 +305,7 @@
       <button class="btn btn-blue" id="printButton" type="button">Print Donor Pass</button>
       <a class="btn btn-orange" href="https://customers.screenings4u.com" id="portalButton">Open Customer Portal</a>
     </div>
-    <div id="donorPassList" class="donor-pass-list">
+    <section id="labcorpLocationPicker" class="dp-site" style="margin-bottom:22px;border:1px solid #d7e3f4;border-radius:12px"><h2 class="section-title">Find your Labcorp collection location</h2><p class="section-copy">After payment, choose a Labcorp location for your test. Your donor pass will update with the selected collection address.</p><form id="labcorpSiteSearch" style="display:flex;flex-wrap:wrap;align-items:end;gap:12px"><label style="flex:1;min-width:160px">ZIP code<input id="labcorpSiteZip" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required placeholder="5-digit ZIP"></label><button class="btn btn-blue" type="submit">Find Locations</button></form><div id="labcorpSiteResults" aria-live="polite" style="margin-top:12px"></div></section><div id="donorPassList" class="donor-pass-list">
       <div class="status active"><div class="status-title">Loading donor pass…</div><div class="status-copy">We are retrieving your paid order and Labcorp workflow.</div></div>
     </div>
   </div>
