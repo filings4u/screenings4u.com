@@ -1149,10 +1149,9 @@ async function ensureServiceCatalogLoaded() {
 
 function isLabcorpEligibleService(service) {
   if (!service) return false;
-  const category = String(service.category || "").toLowerCase();
-  const specimen = String(service.specimen || "").toLowerCase();
-  const results = String(service.results || "").toLowerCase();
-  return category.includes("drug testing") && ["urine","hair","oral fluid"].includes(specimen) && !results.includes("instant") && !results.includes("rapid");
+  // Match the published catalog's fulfillment flag, not a display category.
+  // DOT and DEV checkout products often have categories without "drug testing".
+  return service.labcorpEligible === true;
 }
 
 function isDotLabcorpService(service) {
