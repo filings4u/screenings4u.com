@@ -1772,11 +1772,18 @@ async function refreshTestingCatalog(){
  * Get a service by its ID.
  */
 function getTestService(serviceId) {
-  if (!serviceId || !TEST_SERVICES[serviceId]) {
-    return null;
+  if (typeof serviceId !== "string" || !serviceId.trim()) return null;
+  const requestedId = serviceId.trim();
+  // Only published catalog entries may be checked out. Resolve old links whose
+  // underscores/hyphens differ from the canonical live Supabase service slug.
+  if (SCREENINGS4U_PUBLIC_TESTING_IDS.has(requestedId)) {
+    return TEST_SERVICES[requestedId] || null;
   }
-
-  return SCREENINGS4U_PUBLIC_TESTING_IDS.has(serviceId) ? TEST_SERVICES[serviceId] : null;
+  const normalized = requestedId.toLowerCase().replace(/[-_]/g, "_");
+  const canonicalId = [...SCREENINGS4U_PUBLIC_TESTING_IDS].find(
+    id => id.toLowerCase().replace(/[-_]/g, "_") === normalized
+  );
+  return canonicalId ? (TEST_SERVICES[canonicalId] || null) : null;
 }
 
 /**
