@@ -1240,6 +1240,34 @@ async function initCheckout() {
     selectedService =
       getTestService(serviceId);
 
+    // A newly published service (including checkout test services) may not
+    // exist in the historical bundled catalog. Verify it against the live
+    // public catalog rather than rejecting a legitimate checkout URL.
+    if (!selectedService) {
+      try {
+        const base = String(window.SCREENINGS4U_SUPABASE_URL || "").replace(/\\/+$/, "");
+        if (!base) throw new Error("Catalog API is not configured.");
+        const response = await fetch(base + "/functions/v1/public-testing-catalog", {
+          method: "GET",
+          cache: "no-store",
+          headers: { apikey: window.SCREENINGS4U_SUPABASE_ANON_KEY || "" }
+        });
+        if (!response.ok) throw new Error("Catalog API returned " + response.status);
+        const payload = await response.json();
+        if (!Array.isArray(payload.services)) throw new Error("Invalid catalog response");
+        const normalized = serviceId.toLowerCase().replace(/[-_]/g, "_");
+        selectedService = payload.services.find(item =>
+          item && typeof item.id === "string" &&
+          item.id.toLowerCase().replace(/[-_]/g, "_") === normalized &&
+          item.orderType === "checkout" && Number(item.price) > 0
+        ) || null;
+      } catch (error) {
+        console.error("Unable to load published service for checkout", error);
+        showCheckoutError("Unable to load the live service catalog. Please try again.");
+        return;
+      }
+    }
+
     if (!selectedService) {
 
       showCheckoutError(
