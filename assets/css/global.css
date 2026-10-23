@@ -7,7 +7,7 @@
   --blue:#24467f;
   --blue-dark:#1d3b6d;
   --blue-deep:#24467f;
-  --blue-darker:#10284b;
+  --blue-darker:#24467f;
   --blue-soft:rgba(36,70,127,.10);
   --blue-pale:#f4f7fc;
   --orange:#ff6b00;
@@ -68,7 +68,7 @@ body .topbar span,body .topbar a{color:#fff}
 .nav-actions{display:flex;align-items:center;gap:9px;margin-left:auto}
 
 /* Universal footer */
-#siteFooter{display:block;width:100%;padding:0 0 24px;background:linear-gradient(145deg,var(--blue-darker),var(--blue-deep));color:#fff;position:relative;overflow:hidden}
+#siteFooter{display:block;width:100%;padding:0 0 24px;background:var(--blue);color:#fff;position:relative;overflow:hidden}
 #siteFooter .footer-cta{display:flex;align-items:center;justify-content:space-between;gap:36px;padding-top:34px;padding-bottom:34px;border-bottom:1px solid rgba(255,255,255,.16)}
 #siteFooter .footer-cta-copy{min-width:0}
 #siteFooter .footer-cta-label{display:block;margin-bottom:7px;color:#ffb47d;font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
