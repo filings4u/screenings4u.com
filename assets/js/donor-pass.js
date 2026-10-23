@@ -57,7 +57,16 @@ function setupLabcorpSitePicker(orderId,tracking){
       if(!result.saved)throw Error("Could not save collection location.");
       const state=await loadPassState(orderId,tracking);
       renderOrder(state.order||{},state.donor_passes||[],state.cases||[]);
-      showPassViewer(state,site);
+      const dialog=passDialog(),target=dialog.querySelector("#passWorkflowContent");
+      target.replaceChildren();
+      const title=document.createElement("h2");title.textContent="Location confirmed";
+      const message=document.createElement("p");message.textContent="Your collection location is saved. Registration must complete before generating your donor pass.";
+      const generate=document.createElement("button");generate.type="button";generate.className="btn btn-orange";generate.textContent="Generate Donor Pass";
+      const ready=(state.donor_passes||[]).some(p=>p.status==="issued"&&p.labcorp?.registration_number);
+      generate.disabled=!ready;
+      if(!ready)message.textContent+=" Please return when registration is confirmed.";
+      generate.onclick=()=>showPassViewer(state,site);
+      target.append(title,message,generate);
     }));
     panel.append(name,address,button);host.appendChild(panel)
    }
