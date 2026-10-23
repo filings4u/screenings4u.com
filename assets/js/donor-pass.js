@@ -7,6 +7,7 @@ async function initDonorPass(){
   const orderId=String(params.get("order")||params.get("order_id")||"").trim();
   const tracking=String(params.get("tracking")||params.get("tracking_number")||"").trim();
   document.getElementById("printButton")?.addEventListener("click",()=>window.print());
+  setupLabcorpSitePicker(orderId,tracking);
   if(!orderId||!tracking){showMessage("This donor-pass link is incomplete. Use the link from your order confirmation or receipt email.","error");renderEmpty();return}
   try{
     const base=String(window.SCREENINGS4U_SUPABASE_URL||"").replace(/\/+$/,"");
@@ -30,3 +31,33 @@ function renderOrder(order,passes,cases){
 function renderEmpty(){const host=document.getElementById("donorPassList");if(host)host.innerHTML='<div class="status active"><div class="status-title">Donor pass unavailable.</div><div class="status-copy">Please verify the link or contact screenings4u for assistance.</div></div>'}
 function showMessage(message,type){const el=document.getElementById("pageMessage");if(!el)return;el.className="notice "+type;el.textContent=message;el.style.display="block"}
 function setText(id,v){const el=document.getElementById(id);if(el)el.textContent=v}
+
+function setupLabcorpSitePicker(orderId,tracking){
+ const form=document.getElementById("labcorpSiteSearch"),host=document.getElementById("labcorpSiteResults");
+ if(!form||!host)return;
+ if(!orderId||!tracking){document.getElementById("labcorpLocationPicker").hidden=true;return}
+ const base=String(window.SCREENINGS4U_SUPABASE_URL||"https://elpbnytpciqnbexiaebp.supabase.co").replace(/\/$/,"");
+ async function call(body){
+  const r=await fetch(base+"/functions/v1/public-labcorp-sites",{method:"POST",headers:{"Content-Type":"application/json","apikey":window.SCREENINGS4U_SUPABASE_ANON_KEY||""},body:JSON.stringify({order_id:orderId,tracking,...body})});
+  const data=await r.json().catch(()=>({}));if(!r.ok)throw Error(data.error||"Location request failed");return data;
+ }
+ form.addEventListener("submit",async ev=>{
+  ev.preventDefault();const zip=document.getElementById("labcorpSiteZip").value.trim();if(!/^\d{5}$/.test(zip))return;
+  host.replaceChildren();host.textContent="Searching Labcorp collection locations…";
+  try{
+   const data=await call({action:"search",zip,distance:25});host.replaceChildren();
+   if(!data.sites?.length){host.textContent="No locations returned for this ZIP. Try another ZIP code.";return}
+   for(const site of data.sites){
+    const panel=document.createElement("div");panel.style.cssText="padding:14px 0;border-bottom:1px solid #d7e3f4";
+    const name=document.createElement("strong");name.textContent=site.name;
+    const address=document.createElement("p");address.textContent=site.address+(site.distance?" · "+site.distance+" miles":"");
+    const button=document.createElement("button");button.type="button";button.className="btn btn-blue";button.textContent="Choose this location";
+    button.addEventListener("click",async()=>{
+     button.disabled=true;button.textContent="Saving location…";
+     try{await call({action:"select",site_id:site.id});host.textContent="Collection location saved. Updating donor pass…";location.reload()}
+     catch(error){host.textContent=error.message||"Could not save location";button.disabled=false;button.textContent="Choose this location"}
+    });panel.append(name,address,button);host.appendChild(panel)
+   }
+  }catch(error){host.textContent=error.message||"Location search is unavailable"}
+ });
+}
