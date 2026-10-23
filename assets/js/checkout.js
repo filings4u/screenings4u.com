@@ -1239,6 +1239,27 @@ async function initCheckout() {
     selectedService =
       getTestService(serviceId);
 
+    // Four explicitly configured, $1 Labcorp DEV test products.
+    // These use the same service slugs registered with the payment backend.
+    // A stale client catalog cannot prevent the checkout page from opening;
+    // create-payment-intent still validates active service and actual pricing.
+    const devServices = {
+      labcorp_dev_1usd_dot: { name: "DEV TRANSACTION TEST — DOT — $1", specimen: "Urine", testingScope: "dot" },
+      labcorp_dev_1usd_hair: { name: "DEV TRANSACTION TEST — HAIR — $1", specimen: "Hair", testingScope: "non_dot" },
+      labcorp_dev_1usd_instant: { name: "DEV TRANSACTION TEST — INSTANT — $1", specimen: "Urine", testingScope: "non_dot" },
+      labcorp_dev_1usd_non_dot: { name: "DEV TRANSACTION TEST — NON_DOT — $1", specimen: "Urine", testingScope: "non_dot" }
+    };
+    if (Object.prototype.hasOwnProperty.call(devServices, serviceId)) {
+      const definition = devServices[serviceId];
+      selectedService = {
+        ...definition,
+        id: serviceId, category: "Labcorp DEV Transaction Tests",
+        price: 100, currency: "usd", orderType: "checkout",
+        labcorpEligible: true,
+        description: "Authorized Labcorp DEV end-to-end transaction test."
+      };
+    }
+
     // A newly published service (including checkout test services) may not
     // exist in the historical bundled catalog. Verify it against the live
     // public catalog rather than rejecting a legitimate checkout URL.
