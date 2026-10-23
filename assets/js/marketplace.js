@@ -50,3 +50,36 @@ const setup=async()=>{count();$('#marketYear')&&($('#marketYear').textContent=ne
 };
 document.addEventListener('click',e=>{const saveBtn=e.target.closest('[data-save]');if(saveBtn){const id=saveBtn.dataset.save;if(ids().includes(id))del(id);else add(id);syncCartButtons();return}const remove=e.target.closest('[data-remove]');if(remove)del(remove.dataset.remove);if(e.target.closest('[data-clear-stale]')){const available=new Set(all().map(s=>s.id));save(ids().filter(id=>available.has(id)));renderCart()}});document.addEventListener('change',e=>{const q=e.target.closest('[data-quantity]');if(q)setQuantity(q.dataset.quantity,q.value)});window.addEventListener('market-cart-updated',()=>{count();renderCart();syncCartButtons()});document.readyState==='loading'?document.addEventListener('DOMContentLoaded',setup):setup();
 })();
+
+
+/* Accessible left/right controls for the horizontally scrollable mobile menu. */
+(() => {
+  function setupMobileNavArrows() {
+    document.querySelectorAll('.market-nav').forEach(nav => {
+      const scroller = nav.querySelector('.navwrap');
+      if (!scroller || nav.querySelector('.market-nav-scroll-arrow')) return;
+      for (const direction of ['left', 'right']) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'market-nav-scroll-arrow';
+        button.dataset.direction = direction;
+        button.setAttribute('aria-label', 'Scroll categories ' + direction);
+        button.setAttribute('aria-controls', scroller.id || (scroller.id = 'market-category-navigation'));
+        button.innerHTML = direction === 'left' ? '&#8249;' : '&#8250;';
+        button.addEventListener('click', () => scroller.scrollBy({ left: (direction === 'left' ? -1 : 1) * Math.max(190, Math.round(scroller.clientWidth * .7)), behavior: 'smooth' }));
+        nav.appendChild(button);
+      }
+      const update = () => {
+        const left = nav.querySelector('[data-direction="left"]');
+        const right = nav.querySelector('[data-direction="right"]');
+        left.disabled = scroller.scrollLeft <= 2;
+        right.disabled = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 2;
+      };
+      scroller.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupMobileNavArrows, { once: true });
+  else setupMobileNavArrows();
+})();
