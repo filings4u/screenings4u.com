@@ -29,3 +29,15 @@ body.market-information{background:#f4f7fc;color:#24467f}
 .market-information input:focus-visible,.market-information textarea:focus-visible,.market-information select:focus-visible{outline:2px solid #ff6b00;outline-offset:2px}
 .market-information #siteFooter{background:#24467f}
 @media(max-width:750px){.market-information .hero-content{padding:43px 0 48px}.market-information .faqs-hero-inner{padding:40px 0 45px}.market-information .contact-section{padding-top:36px}.market-information .faqs-section{padding-top:34px}}
+
+
+/* Contact hero: photo right on desktop, image first on mobile. */
+.market-information .contact-hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.94fr);align-items:stretch;gap:48px;padding-top:38px;padding-bottom:42px}
+.market-information .contact-hero-grid .hero-content{padding:44px 0;align-self:center;min-width:0}
+.market-information .contact-hero-image{min-height:430px;border-radius:16px;overflow:hidden;background:#dce7f4}
+.market-information .contact-hero-image img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:750px){
+ .market-information .contact-hero-grid{display:flex;flex-direction:column;gap:0;padding-top:14px;padding-bottom:28px}
+ .market-information .contact-hero-image{order:-1;min-height:0;height:245px;border-radius:12px 12px 0 0}
+ .market-information .contact-hero-grid .hero-content{padding:28px 14px 16px;width:100%}
+}
