@@ -5,7 +5,7 @@
     if(!target||target.dataset.ready==="1")return;
     target.dataset.ready="1";
     const hasPageCTA=!!document.querySelector("main .cta, main [class*='final-cta'], main [class*='closing-cta']");
-    const cta=hasPageCTA?"":`<div class="footer-cta"><div class="footer-cta-copy"><span class="footer-cta-label">Nationwide Testing Support</span><strong>Need help choosing the right testing service?</strong><p>Our team can help with personal, workplace, mobile, DOT, post-accident and compliance testing needs.</p></div><div class="footer-cta-actions"><a class="footer-button footer-button-secondary" href="contact.html">Contact Our Team</a><a class="footer-button footer-button-primary" href="services.html">Order a Test</a></div></div>`;
+    const cta=`<div class="footer-cta"><div class="footer-cta-copy"><span class="footer-cta-label">Nationwide Testing Support</span><strong>Need help choosing the right testing service?</strong><p>Our team can help with personal, workplace, mobile, DOT, post-accident and compliance testing needs.</p></div><div class="footer-cta-actions"><a class="footer-button footer-button-secondary" href="contact.html">Contact Our Team</a><a class="footer-button footer-button-primary" href="services.html">Order a Test</a></div></div>`;
     target.innerHTML=cta+`
       <div class="footer-shell">
         <div class="footer-brand-area">
