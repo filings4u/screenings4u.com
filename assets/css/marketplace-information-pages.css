@@ -1,0 +1,31 @@
+/* Screenings4U marketplace-aligned support pages */
+body.market-information{background:#f4f7fc;color:#24467f}
+.market-information .market-header{background:#fff}
+.market-information .container{max-width:1450px}
+.market-information main{overflow:clip}
+.market-information .hero,.market-information .faqs-hero{background:#f4f7fc!important;color:#24467f!important;min-height:0}
+.market-information .hero:after,.market-information .faqs-hero:after{display:none}
+.market-information .hero-content{padding:70px 0 82px;max-width:900px}
+.market-information .hero h1,.market-information .faqs-hero h1{color:#24467f!important;letter-spacing:-.045em;font-size:clamp(38px,5vw,65px);line-height:1.08}
+.market-information .hero h1 span{color:#ff6b00}
+.market-information .hero p,.market-information .faqs-hero p{color:#52657a!important;font-size:16px;line-height:1.7}
+.market-information .hero .eyebrow,.market-information .faqs-hero .eyebrow{color:#ff6b00}
+.market-information .hero .btn-outline{color:#24467f;background:#fff;border:1px solid #cbd9e7}
+.market-information .hero .btn-outline:hover{background:#24467f;color:white}
+.market-information .faqs-hero-inner{padding:62px 0 55px;text-align:left}
+.market-information .faqs-hero h1,.market-information .faqs-hero p{margin-left:0;max-width:800px}
+.market-information .faqs-search-wrap{max-width:760px;margin:26px 0 0}
+.market-information .faqs-search{border:1px solid #cbd9e7;border-radius:10px;background:#fff}
+.market-information .faqs-section{background:#fff;padding:52px 0 80px}
+.market-information .faqs-sidebar,.market-information .faqs-list>*,.market-information .contact-sidebar,.market-information .contact-form-card,.market-information .pathway{border-color:#dbe5f0;border-radius:14px}
+.market-information .faqs-contact{background:#24467f;color:#fff}
+.market-information .faqs-contact h2,.market-information .faqs-contact p{color:#fff}
+.market-information .faqs-contact a{background:#ff6b00;color:#fff;border-radius:8px}
+.market-information .contact-section{margin-top:0;background:#fff;padding:58px 0 84px}
+.market-information .contact-sidebar,.market-information .contact-form-card{box-shadow:0 12px 32px rgba(36,70,127,.07)}
+.market-information .pathways{background:#f4f7fc}
+.market-information .pathway:hover{border-color:#ff6b00}
+.market-information .contact-form-card button,.market-information .btn-orange{background:#ff6b00;color:#fff}
+.market-information input:focus-visible,.market-information textarea:focus-visible,.market-information select:focus-visible{outline:2px solid #ff6b00;outline-offset:2px}
+.market-information #siteFooter{background:#24467f}
+@media(max-width:750px){.market-information .hero-content{padding:43px 0 48px}.market-information .faqs-hero-inner{padding:40px 0 45px}.market-information .contact-section{padding-top:36px}.market-information .faqs-section{padding-top:34px}}
