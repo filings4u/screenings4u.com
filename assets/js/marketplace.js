@@ -83,3 +83,32 @@ document.addEventListener('click',e=>{const saveBtn=e.target.closest('[data-save
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupMobileNavArrows, { once: true });
   else setupMobileNavArrows();
 })();
+
+
+/* Migrate remaining marketplace pages to the one shared screenshot footer. */
+(() => {
+  function unifyFooter() {
+    const old = document.querySelector('footer.market-footer');
+    if (!old || document.getElementById('siteFooter')) return;
+    const footer = document.createElement('footer');
+    footer.id = 'siteFooter';
+    footer.className = 'site-footer';
+    footer.setAttribute('aria-label', 'Website footer');
+    old.replaceWith(footer);
+    if (!document.querySelector('link[href*="assets/css/footer.css"]')) {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'assets/css/footer.css?v=20261023-unified-1';
+      document.head.append(css);
+    }
+    if (typeof window.refreshUniversalFooter === 'function') {
+      window.refreshUniversalFooter();
+    } else if (!document.querySelector('script[src*="assets/js/footer.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'assets/js/footer.js?v=20261023-unified-1';
+      document.body.append(script);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', unifyFooter, {once:true});
+  else unifyFooter();
+})();
